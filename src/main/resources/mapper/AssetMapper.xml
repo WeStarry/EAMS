@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.eams.mapper.AssetMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.eams.entity.Asset">
+        <id column="id" property="id" />
+        <result column="asset_code" property="assetCode" />
+        <result column="asset_name" property="assetName" />
+        <result column="category_id" property="categoryId" />
+        <result column="asset_status" property="assetStatus" />
+        <result column="model" property="model" />
+        <result column="position" property="position" />
+        <result column="price" property="price" />
+        <result column="purchase_date" property="purchaseDate" />
+        <result column="expire_date" property="expireDate" />
+        <result column="use_user_id" property="useUserId" />
+        <result column="use_user_name" property="useUserName" />
+        <result column="use_department_id" property="useDepartmentId" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_by" property="createBy" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, asset_code, asset_name, category_id, asset_status, model, position,
+        price, purchase_date, expire_date, use_user_id, use_user_name, use_department_id,
+        remark, create_time, update_time, create_by, is_deleted
+    </sql>
+
+    <insert id="insert" parameterType="com.example.eams.entity.Asset" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_asset (
+            asset_code, asset_name, category_id, asset_status, model, position,
+            price, purchase_date, expire_date, remark, create_by, is_deleted
+        ) VALUES (
+                     #{assetCode}, #{assetName}, #{categoryId}, #{assetStatus}, #{model}, #{position},
+                     #{price}, #{purchaseDate}, #{expireDate}, #{remark}, #{createBy}, 0
+                 )
+    </insert>
+
+    <select id="countByCondition" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM sys_asset
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND asset_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <select id="selectPageByCondition" resultType="com.example.eams.entity.Asset">
+        SELECT * FROM sys_asset
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND asset_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+
+            <update id="deleteById">
+                UPDATE sys_asset SET is_deleted = 1, update_time = NOW() WHERE id = #{id}
+            </update>
+
+    <update id="updateAsset">
+        UPDATE sys_asset
+        <set>
+            <if test="assetName != null and assetName != ''">
+                asset_name = #{assetName},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="model != null">
+                model = #{model},
+            </if>
+            <if test="position != null">
+                position = #{position},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="purchaseDate != null">
+                purchase_date = #{purchaseDate},
+            </if>
+            <if test="expireDate != null">
+                expire_date = #{expireDate},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+</mapper>

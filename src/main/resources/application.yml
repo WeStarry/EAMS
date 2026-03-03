@@ -1,0 +1,22 @@
+# application.yml
+spring:
+  datasource:
+    # 【新增1】明确告诉它：我要用 MySQL 的驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 【新增2】明确告诉它：我要用 Druid 连接池（因为你的依赖里有 druid 包）
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    url: jdbc:mysql://localhost:3306/eams?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+knife4j:
+  enable: true
+
+server:
+  port: 1111
