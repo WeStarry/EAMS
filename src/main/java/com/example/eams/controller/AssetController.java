@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
+// 声明这是一个 Controller 类，专门用来处理与资产相关的 HTTP 请求
 @RestController
 @CrossOrigin // 必须加！允许前端 5173 端口跨域请求当前接口
 public class AssetController {
