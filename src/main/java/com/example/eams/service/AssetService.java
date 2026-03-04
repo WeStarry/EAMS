@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 
 @Service
 public class AssetService {
@@ -89,6 +91,27 @@ public class AssetService {
         // 现在改成：
         if (rows == 0) {
             throw new BusinessException("修改失败：该资产不存在或已被删除");
+        }
+    }
+
+    /**
+     * 修改资产状态
+     */
+    public void updateAssetStatus(Long id, Integer assetStatus) {
+        // 1. 基础防御：防止前端传空数据
+        if (id == null || assetStatus == null) {
+            throw new BusinessException("修改失败：资产ID和状态码不能为空！");
+        }
+
+        // 2. 可以在这里加业务逻辑拦截，比如校验传过来的状态码是不是合法的 (0,1,2,3)
+        if (assetStatus < 0 || assetStatus > 3) {
+            throw new BusinessException("修改失败：非法的状态码！");
+        }
+
+        // 3. 执行更新
+        int rows = assetMapper.updateAssetStatus(id, assetStatus);
+        if (rows == 0) {
+            throw new BusinessException("状态修改失败：该资产不存在或已被删除！");
         }
     }
 }

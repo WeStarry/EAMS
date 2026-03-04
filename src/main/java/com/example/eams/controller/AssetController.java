@@ -79,4 +79,16 @@ public class AssetController {
         assetService.updateAsset(asset);
         return Result.success("修改成功！");
     }
+
+    @PutMapping("/test/updateStatus/{id}")
+    public Result<String> updateStatus(
+            @PathVariable("id") Long id,
+            @RequestParam("assetStatus") Integer assetStatus) {
+
+        // 直接调用 Service
+        assetService.updateAssetStatus(id, assetStatus);
+        return Result.success("状态流转成功！");
+    }
+
+
 }
