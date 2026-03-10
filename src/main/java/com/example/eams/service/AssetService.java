@@ -103,8 +103,9 @@ public class AssetService {
             throw new BusinessException("修改失败：资产ID和状态码不能为空！");
         }
 
-        // 2. 可以在这里加业务逻辑拦截，比如校验传过来的状态码是不是合法的 (0,1,2,3)
-        if (assetStatus < 0 || assetStatus > 3) {
+        // 2. 校验传过来的状态码是不是合法的 (0,1,2,3,4)
+        // 0-闲置, 1-领用中, 2-借用中, 3-维修中, 4-已报废
+        if (assetStatus < 0 || assetStatus > 4) {
             throw new BusinessException("修改失败：非法的状态码！");
         }
 
